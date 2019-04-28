@@ -1,0 +1,86 @@
+html, body {
+  background: #191919;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+#canvas {
+  width: 100vw;
+  height: 100vh;
+}
+
+#btn {
+  position: fixed;
+  z-index: 10;
+  width: 100px;
+  height: 30px;
+  background-color: red;
+  top: 10px;
+  left: 10px;
+}
+
+.range-container {
+  z-index: 10;
+  position: fixed;
+  right: 30px;
+  bottom: 10%;
+  width: 500px;
+}
+
+.brk-btn {
+  left: 5%;
+  bottom: 10%;
+  position: fixed;
+  background: none;
+  color: aqua;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 0.2em solid aqua;
+  padding: 0.5em 1em;
+}
+
+.brk-btn::before {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 10%;
+  background: #222;
+  height: 0.3em;
+  right: 20%;
+  top: -0.21em;
+  transform: skewX(-45deg);
+  -webkit-transition: all 0.45s cubic-bezier(0.86, 0, 0.07, 1);
+  transition: all 0.45s cubic-bezier(0.86, 0, 0.07, 1);
+}
+
+.brk-btn::after {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 10%;
+  background: #222;
+  height: 0.3em;
+  left: 20%;
+  bottom: -0.25em;
+  transform: skewX(45deg);
+  -webkit-transition: all 0.45 cubic-bezier(0.86, 0, 0.07, 1);
+  transition: all 0.45s cubic-bezier(0.86, 0, 0.07, 1);
+}
+
+.brk-btn:hover::before {
+  right: 80%;
+}
+
+.brk-btn:hover::after {
+  left: 80%;
+}
+
+
+#toggle-mode {
+  color: greenyellow;
+  border-color: greenyellow;
+  top: 20%;
+  left: 40%;
+  bottom: auto;
+}

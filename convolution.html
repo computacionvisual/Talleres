@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Computación visual</title>
+  <link rel="stylesheet" href="convolution.css">
+</head>
+<body>
+
+  <div class="container">
+    <button onclick="applyMask(img_filter, MASK_EDGE_DETECTION1);">Detección de bordes 1</button>
+    <button onclick="applyMask(img_filter, MASK_EDGE_DETECTION2);">Detección de bordes 2</button>
+    <button onclick="applyMask(img_filter, MASK_SHARPEN);">Sharpen</button>
+    <button onclick="applyMask(img_filter, MASK_AVGBLUR);">Desenfoque avg</button>
+    <button onclick="applyMask(img_filter, MASK_AVGBLUR11);">Desenfoque avg 11</button>
+    <button onclick="applyMask(img_base, MASK_AVGBLUR11); applyMask(img_filter, MASK_GAUSSIAN11);">Compare gauss avg</button>
+    <button onclick="applyMask(img_filter, MASK_GAUSSIAN11);">Desenfoque Gauss 11</button>
+  </div>
+
+  <div id="canvas"></div>
+  <script src="p5/p5.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.11/addons/p5.dom.min.js"></script>
+  <script src="./p5/addons/p5.dom.min.js"></script>
+  <script src="./filter2.js"></script>
+  <script src="./lodash.js"></script>
+</body>
+</html>
