@@ -29,13 +29,9 @@ function setup() {
   if(current_mode == 'Image') {
     lumaGrayscale(img_luma);
     lumaGrayscale(img_segmentated);
-    applyMask(img_mask, MASK_SHARPEN);
+    applyMask(img_mask, MASK_EDGE_DETECTION2);
 
-    lastLimit = createHistogram(img_base, 'L', 30, HISTOGRAM_POSIT
-    '
-    
-    
-    ION, {height: 130});
+    lastLimit = createHistogram(img_base, 'L', 30, HISTOGRAM_POSITION, {height: 130});
                 createHistogram(img_base, R, 30, 150, {color: [255, 0, 0], height: 130});
                 createHistogram(img_base, G, 30, 150, {color: [0, 255, 0], height: 130});
                 createHistogram(img_base, B, 30, 150, {color: [0, 0, 255], height: 130});
@@ -51,6 +47,8 @@ function setup() {
 }
 
 function draw() {
+  console.log("Test");
+
   let aspectRatio = img_base.width / img_base.height;
   let aspectRatioVideo = video_base.width / video_base.height;
   let imageSize = 400;
