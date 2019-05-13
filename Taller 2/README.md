@@ -14,7 +14,7 @@ Implementar al menos 6 ilusiones de tres tipos distintos (paradójicas, geométr
 |--------------------------|----------------|
 | Fabián Camilo Ordóñez    | fcordonezo     |
 | Jair Alexis Villalba     | JairVillalba   |
-| Daniel Esteban Rodriguez | daerodriguezme |
+| Daniel Esteban Rodriguez | Dandarprox     |
 
 ## Discusión
 
