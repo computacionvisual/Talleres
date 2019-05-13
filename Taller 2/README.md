@@ -20,12 +20,12 @@ Implementar al menos 6 ilusiones de tres tipos distintos (paradójicas, geométr
 
 |       Ilusión        | Categoria | Referencia | Tipo de interactividad (si aplica) | URL código base (si aplica) |
 |----------------------|-----------|------------|------------------------------------|-----------------------------|
-|Benham's top colours  |           |            |                                    |                             |
-|Hering illusion       |           |            |                                    |                             |
-|Poggendorff illusion  |           |            |                                    |                             |
-|Pyramid illusion      |           |            |                                    |                             |
-|Skye's oblique grating|           |            |                                    |                             |
-|Stereokinetic effect  |           |            |                                    |                             |
+|Benham's top colours  |           |[Benham](https://michaelbach.de/ot/col-Benham/index.html)|                                    |                             |
+|Hering illusion       |           |[Hering](https://michaelbach.de/ot/ang-hering/index.html)|                                    |                             |
+|Poggendorff illusion  |           |[Poggendorff](https://michaelbach.de/ot/ang-poggendorff/index.html)|                                    |                             |
+|Pyramid illusion      |           |[Pyramid](https://michaelbach.de/ot/lum-pyramid/index.html)|                                    |                             |
+|Skye's oblique grating|           |[Skye](https://michaelbach.de/ot/ang-SkyeGrating/index.html)|                                    |                             |
+|Stereokinetic effect  |           |[Stereokinetic](https://michaelbach.de/ot/mot-ske/index.html)|                                    |                             |
 
 2. Describa brevememente las referencias estudiadas y los posibles temas en los que le gustaría profundizar
 
