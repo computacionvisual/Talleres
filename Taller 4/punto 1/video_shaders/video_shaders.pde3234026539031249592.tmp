@@ -1,0 +1,40 @@
+import processing.video.*;
+
+Boolean mouseClicked = false;
+Boolean greyKeyFlag = false, blurKeyFlag = false;
+PShader edges; 
+PShader normal; 
+PShader blur;
+Long end = new Long(0), init = new Long(0);
+Movie video;
+float lumaValue;
+String path = "video.mp4";
+
+void setup(){
+  size(1280, 720, P2D);
+  normal = loadShader("normal.glsl");
+  blur = loadShader("edges.glsl");
+  video = new Movie(this, path);
+  video.play();
+}
+
+void draw() {
+  shader( blur );
+  image(video, 0, 0, width, height);
+}
+void movieEvent(Movie m){
+  m.read();
+  if( mouseClicked ){
+    init = System.currentTimeMillis();
+    
+    
+    end = System.currentTimeMillis();
+  }
+
+}
+
+void mousePressed(){
+  if(mouseClicked == false){
+    mouseClicked = true;
+  }
+}
