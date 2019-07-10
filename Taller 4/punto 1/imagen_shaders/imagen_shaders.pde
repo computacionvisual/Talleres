@@ -1,22 +1,21 @@
-Boolean greyKeyFlag = false, blurKeyFlag = false, edgeKeyFlag = false;
-PShader edges; 
-PShader normal; 
-PShader blur;
+Boolean greyKeyFlag = false, blurKeyFlag = false, edgeKeyFlag = false, focusKeyFlag = false;
+PShader edges, normal, blur, greyScale, focus; 
 PImage image;
-PImage image2;
-Boolean mouseClicked = false;
+
 Long end = new Long(0), init = new Long(0);
 void setup() {
-  size(1280, 600, P2D);
+  size( 1280, 600, P2D );
   image = loadImage("hoja.jpg");
-  image2 = image;
   normal = loadShader("normal.glsl");
   edges = loadShader("edges.glsl");
   blur = loadShader("blur.glsl");
+  focus = loadShader("focus.glsl");
+  greyScale = loadShader("greyScale.glsl");
   shader(normal);
-  image(image, 0, 0, width/2, height);
+  image( image, 0, 0 );
+  image( image, width/2+1, 0 );
   resetShader();
-  image(image2, width/2 + 1, 0, width/2, height );
+
 }
 
 void draw() {
@@ -26,8 +25,8 @@ void keyPressed(){
    if( key == 'g' && !greyKeyFlag ){
       init = System.currentTimeMillis();
       resetShader();
-      shader( blur );
-      image( image2, width/2 + 1, 0, width/2, height );
+      shader( greyScale );
+      image( image, width/2+1, 0 );
       end = System.currentTimeMillis();
       System.out.println( end - init );
    }
@@ -35,7 +34,7 @@ void keyPressed(){
       init = System.currentTimeMillis();
       resetShader();
       shader( blur );
-      image( image2, width/2 + 1, 0, width/2, height );
+      image( image, width/2+1, 0 );
       end = System.currentTimeMillis();
       System.out.println( end - init );
    }
@@ -43,13 +42,25 @@ void keyPressed(){
       init = System.currentTimeMillis();
       resetShader();
       shader( edges );
-      image( image2, width/2 + 1, 0, width/2, height );
+      image( image, width/2+1, 0 );
+      end = System.currentTimeMillis();
+      System.out.println( end - init );
+   }
+   else if( key == 'f' && !edgeKeyFlag ){
+      init = System.currentTimeMillis();
+      resetShader();
+      shader( focus );
+      image( image, width/2+1, 0 );
       end = System.currentTimeMillis();
       System.out.println( end - init );
    }
    else{
+     resetShader();
+     shader( normal );
+     image( image, width/2+1, 0 );
      edgeKeyFlag = false;
      greyKeyFlag = false; 
      blurKeyFlag = false;
+     focusKeyFlag = false;
    }
 }
