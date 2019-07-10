@@ -1,16 +1,32 @@
-Boolean greyKeyFlag = false, blurKeyFlag = false, edgeKeyFlag = false;
-PImage image, image2;
+Boolean greyKeyFlag = false, blurKeyFlag = false, edgeKeyFlag = false, focusKeyFlag = false;
+PImage image;
 float lumaValue;
 int pixel;
+
+float avgBlur[][] = {
+    {0.111111,0.111111,0.111111},
+    {0.111111,0.111111,0.111111},
+    {0.111111,0.111111,0.111111}
+  },
+  edges[][] = {
+    {-1.0,-1.0,-1.0},
+    {-1.0,8.0,-1.0},
+    {-1.0,-1.0,-1.0}
+  },
+  focus[][] = {
+    {0,0,-1,0,0},
+    {0,0,-1,0,0},
+    {-1,-1,9,-1,-1},
+    {0,0,-1,0,0},
+    {0,0,-1,0,0},
+  };
 
 void setup() {
   noStroke();
   size( 1280, 600 );
   image = loadImage( "hoja.jpg" );
-  image2 = image;
   image( image, 0, 0 );
-  image( image2, width/2, 0 );
-  rect( 10, 20, 200, 25 );
+  image( image, width/2+1, 0 );
   fill( 0,0,0 );
   textSize(15);
 }
@@ -18,7 +34,8 @@ void setup() {
 void draw() {
 }
 
-private void greyScale( ){
+PImage greyScale( PImage image ){
+  PImage rImage = createImage(image.width, image.height, RGB);
   for( int i = 0; i < image.width; i++ ){
     for( int j = 0; j < image.height * 1; j++ ){
       pixel = image.get( i, j );
@@ -26,94 +43,63 @@ private void greyScale( ){
         (0.2126 * red(pixel)) + 
         (0.7152 * green(pixel)) + 
         (0.0722 * blue(pixel));
-      image2.set( i, j, color( lumaValue, lumaValue, lumaValue ) );
+      rImage.set( i, j, color( lumaValue, lumaValue, lumaValue ) );
     }
   }
+  return rImage;
 }
 
-void avgBlur( PImage image ){
-
-  float avgBlur[][] = {
-    {0.111111,0.111111,0.111111},
-    {0.111111,0.111111,0.111111},
-    {0.111111,0.111111,0.111111}
-  };
-  
-
-  loadPixels();
-  for (int x = width/2; x < width; x++) {
-    for (int y = 0; y < height; y++ ) {
-      color c = convolution(x, y, avgBlur, 3, image);
-      int loc = x + y * width;
-      try{
-      pixels[loc] = c;
-      }
-      catch(Exception e){
-        println( "here", width );
-        println( x, y );
-        throw e;
-      }
+PImage applyMask( PImage image, float[][] mask, int matrixSize ){
+  PImage rImage = createImage(image.width, image.height, RGB);
+  for (int x = 0; x < image.width; x++) {
+    for (int y = 0; y < image.height; y++ ) {
+      color c = convolution(x, y, mask, matrixSize, image);
+      rImage.set(x, y, c);
     }
   }
-  updatePixels();
-}
-
-void edges( PImage image ){
-  float edges[][] = {
-    {-1.0,-1.0,-1.0},
-    {-1.0,8.0,-1.0},
-    {-1.0,-1.0,-1.0}
-  };
-  
-
-  loadPixels();
-  for (int x = width/2; x < width; x++) {
-    for (int y = 0; y < height; y++ ) {
-      color c = convolution(x, y, edges, 3, image);
-      int loc = x + y * width;
-      try{
-      pixels[loc] = c;
-      }
-      catch(Exception e){
-        println( "here", width );
-        println( x, y );
-        throw e;
-      }
-    }
-  }
-  updatePixels();
+  return rImage;
 }
 
 void keyPressed(){
    if( key == 'g' && !greyKeyFlag ){
      long init = System.currentTimeMillis();
-     greyScale( );
-     image( image2, width/2, 0 );
+     image( greyScale( image ), width/2+1, 0 );
      long end = System.currentTimeMillis();
      fill( 255,255,255 );
-     rect( 10, 20, 300, 25 );
+     rect( 10, 20, 200, 25 );
      fill( 0,0,0 );
      text( "Tiempo: " + (end - init) + "ms", 25, 38 );
    }
    else if( key == 'b' && !blurKeyFlag ){
      long init = System.currentTimeMillis();
-     avgBlur( image );
+     image( applyMask( image, avgBlur, 3 ), width/2+1, 0 );
      long end = System.currentTimeMillis();
      fill( 255,255,255 );
-     rect( 10, 20, 300, 25 );
+     rect( 10, 20, 200, 25 );
      fill( 0,0,0 );
      text( "Tiempo: " + (end - init) + "ms", 25, 38 );
    }
    else if( key == 'e' && !edgeKeyFlag ){
      long init = System.currentTimeMillis();
-     edges( image );
+     image( applyMask( image, edges, 3 ), width/2+1, 0 );
      long end = System.currentTimeMillis();
      fill( 255,255,255 );
-     rect( 10, 20, 300, 25 );
+     rect( 10, 20, 200, 25 );
+     fill( 0,0,0 );
+     text( "Tiempo: " + (end - init) + "ms", 25, 38 );
+   }
+   else if( key == 'f' && !focusKeyFlag ){
+     long init = System.currentTimeMillis();
+     image( applyMask( image, focus, 5 ), width/2+1, 0 );
+     long end = System.currentTimeMillis();
+     fill( 255,255,255 );
+     rect( 10, 20, 200, 25 );
      fill( 0,0,0 );
      text( "Tiempo: " + (end - init) + "ms", 25, 38 );
    }
    else{
+     image( image, width/2+1, 0 );
+     focusKeyFlag = false;
      edgeKeyFlag = false;
      greyKeyFlag = false; 
      blurKeyFlag = false;
