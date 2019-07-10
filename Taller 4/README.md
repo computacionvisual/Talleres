@@ -24,13 +24,13 @@ Complete la tabla:
 
 1. 
 
-#Objetivos.
+### Objetivos.
 
 * Medir la capacidad de procesamiento de imágenes, a las cuales se les aplicará una serie de filtros, así como también el procesamiento de vídeo con los mismos filtros. Ésto en un procesador, que en nuestro caso es un Intel Core i7-6500U con 4 núcleos, 8 hilos, 2.5 GHz de frecuencia base y 2.6GHz en turbo.
 * Realizar esta misma medición pero ahora cargando el procesamiento de las imágenes y vídeo en una GPU, que para este caso es una gráfica Intel HD Graphics 520.
 * Dar cuenta de la gran diferencia que existe entre una CPU y una GPU en cuanto a procesamiento de imágenes y vídeo se trata.
 
-#Montaje experimental.
+### Montaje experimental.
 
 1. Los filtros que se aplicarán tanto a imágenes como a vídeo son:
 
@@ -62,9 +62,9 @@ Resolución del vídeo: 1280px X 720px
 
 * video_shaders: Se mostrará el mismo vídeo que para el caso de "video_software", con la clara diferencia de que en este caso el vídeo será procesado utilizando shaders.
 
-#Resultados:
+### Resultados:
 
-* Comparación entre imagen_software e imagen_shaders.
+#### Comparación entre imagen_software e imagen_shaders.
 Valor a medir: tiempo promedio de aplicación del filtro.
 
 - ESCALA DE GRISES: 
@@ -91,57 +91,85 @@ Software: 80,2ms promedio
 Shaders:  1.5ms  promedio
           13ms   Inicial
 
-* Comparación entre imagen_software_8k e imagen_shaders_8k.
+#### Comparación entre imagen_software_8k e imagen_shaders_8k.
 Valor a medir: tiempo promedio de aplicación del filtro en milisegundos (ms).
 
+
 - ESCALA DE GRISES: 
-Software: 3567.2ms promedio
+
+Software: 3567.2ms promedio.
           3653ms   Inicial
-Shaders:  2.5ms    promedio
+
+Shaders:  2.5ms    promedio.
           24ms     Inicial
 
+
 - BORDES: 
-Software: 5156ms   promedio
+
+Software: 5156ms   promedio.
           5435ms   Inicial
-Shaders:  4.9ms    promedio
+
+Shaders:  4.9ms    promedio.
           46ms     Inicial
 
+
 - DESENFOQUE: 
-Software: 5625.4ms promedio
+
+Software: 5625.4ms promedio.
           5738ms   Inicial
-Shaders:  2.0ms    promedio
+
+Shaders:  2.0ms    promedio.
           13ms     Inicial
 
+
 - ENFOQUE: 
-Software: 7025ms   promedio
+
+Software: 7025ms   promedio.
           7177ms   Inicial
+
 Shaders:  1.4ms    promedio
           13ms     Inicial
 
-* Comparación entre video_software e shaders_shaders.
+
+#### Comparación entre video_software e shaders_shaders.
 Valor a medir: Frames por segundo (FPS).
 
--SIN FILTRO:
+- SIN FILTRO:
+
 Software: 60FPS  promedio
+
 Shaders:  60FPS  promedio
+
 
 - ESCALA DE GRISES: 
+
 Software: 20FPS  promedio
+
 Shaders:  60FPS  promedio
+
 
 - BORDES: 
+
 Software: 10FPS  promedio
+
 Shaders:  60FPS  promedio
+
 
 - DESENFOQUE: 
+
 Software: 11FPS  promedio
+
 Shaders:  60FPS  promedio
+
 
 - ENFOQUE: 
+
 Software: 6.5FPS promedio
+
 Shaders:  60FPS  promedio
 
-#Conclusiones.
+
+## Conclusiones.
 
 * Si bien para el caso de una imagen pequeña (640px X 600px) la diferencia de rendimiento entre CPU y GPU no tiene un margen demasiado alto, a pesar de que se proclama superior la GPU, en cuanto la imagen se hace más y más grande, la diferencia se vuelve exponencialmente grande. Mientras que para el procesador, la carga extra se hace notar, la GPU no muestra siquiera aumento en el tiempo de ejecución.
 
