@@ -38,12 +38,12 @@ Complete la tabla:
 * Desenfoque promedio.       (B) Matriz 3x3
 * Detección de bordes.       (E) Matriz 3x3
 * Enfoque.                   (F) Matriz 5x5
+
 Nota: las letras entre paréntesis representan la tecla que se debe presionar para aplicar el filtro.
 
 2. Se tienen seis programas diferentes escritos en Processing, los cuales son:
 
 * imagen_software: Este programa carga dos imágenes (que son de hecho la misma) en la pantalla. Al momento de aplicar un filtro, la imágen de la derecha será la que se verá afectada, mientras que la de la izquierda quedará intacta. Ésto con el fin de hacer la comparación entre original y modificada.
-
 Al momento de aplicar un filtro, en pantalla se podrá apreciar cuál fue el tiempo que le tomó al procesador realizar los cálculos y modificar la imagen.
 
 Resolución de la imágen: 640px X 600px
@@ -65,33 +65,48 @@ Resolución del vídeo: 1280px X 720px
 ### Resultados:
 
 #### Comparación entre imagen_software e imagen_shaders.
+
 Valor a medir: tiempo promedio de aplicación del filtro.
 
-- ESCALA DE GRISES: 
+
+- ESCALA DE GRISES:
+
 Software: 26,2ms promedio
           34ms   Inicial
+
 Shaders:  0.9ms  promedio
           8ms    Inicial
 
+
 - BORDES: 
+
 Software: 43,3ms promedio
           49ms   Inicial
+
 Shaders:  1.9ms  promedio
           12ms   Inicial
 
+
 - DESENFOQUE: 
+
 Software: 54ms   promedio
           45ms   Inicial
+
 Shaders:  1.2ms  promedio
           11ms   Inicial
 
+
 - ENFOQUE: 
+
 Software: 80,2ms promedio
           99ms   Inicial
+
 Shaders:  1.5ms  promedio
           13ms   Inicial
 
+
 #### Comparación entre imagen_software_8k e imagen_shaders_8k.
+
 Valor a medir: tiempo promedio de aplicación del filtro en milisegundos (ms).
 
 
