@@ -184,7 +184,7 @@ Software: 6.5FPS promedio
 Shaders:  60FPS  promedio
 
 
-## Conclusiones.
+### Conclusiones.
 
 * Si bien para el caso de una imagen pequeña (640px X 600px) la diferencia de rendimiento entre CPU y GPU no tiene un margen demasiado alto, a pesar de que se proclama superior la GPU, en cuanto la imagen se hace más y más grande, la diferencia se vuelve exponencialmente grande. Mientras que para el procesador, la carga extra se hace notar, la GPU no muestra siquiera aumento en el tiempo de ejecución.
 
