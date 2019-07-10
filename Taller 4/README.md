@@ -22,7 +22,7 @@ Complete la tabla:
 
 ## Informe
 
-1. 
+1. Primer punto del taller.
 
 ### Objetivos.
 
