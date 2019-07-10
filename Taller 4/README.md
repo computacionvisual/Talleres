@@ -146,7 +146,7 @@ Shaders:  1.4ms    promedio
           13ms     Inicial
 
 
-#### Comparación entre video_software e shaders_shaders.
+#### Comparación entre video_software e video_shaders.
 Valor a medir: Frames por segundo (FPS).
 
 - SIN FILTRO:
