@@ -1,13 +1,9 @@
 import processing.video.*;
 
-Boolean mouseClicked = false;
-Boolean greyKeyFlag = false, blurKeyFlag = false, edgeKeyFlag = false;
-PShader edges; 
-PShader normal; 
-PShader blur;
+Boolean greyKeyFlag = false, blurKeyFlag = false, edgeKeyFlag = false, focusKeyFlag = false;
+PShader normal, edges, blur, greyScale, focus; 
 Long end = new Long(0), init = new Long(0);
 Movie video;
-float lumaValue;
 String path = "video.mp4";
 
 void setup(){
@@ -15,19 +11,24 @@ void setup(){
   normal = loadShader("normal.glsl");
   blur = loadShader("blur.glsl");
   edges = loadShader("edges.glsl");
+  greyScale = loadShader("greyScale.glsl");
+  focus = loadShader("focus.glsl");
   video = new Movie(this, path);
   video.play();
 }
 
 void draw() {
   if( greyKeyFlag ){
-    //shader( blur );
+    shader( greyScale );
   }
   else if( blurKeyFlag ){
     shader( blur );
   }
   else if( edgeKeyFlag ){
     shader( edges );
+  }
+  else if( focusKeyFlag ){
+    shader( focus );
   }
   else{
     shader( normal );
@@ -52,9 +53,14 @@ void keyPressed(){
      resetShader();
      edgeKeyFlag = true;
    }
+   else if( key == 'f' && !focusKeyFlag ){
+     resetShader();
+     focusKeyFlag = true;
+   }
    else{
      edgeKeyFlag = false;
      greyKeyFlag = false; 
      blurKeyFlag = false;
+     focusKeyFlag = false;
    }
 }
