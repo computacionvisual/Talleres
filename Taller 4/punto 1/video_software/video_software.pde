@@ -1,18 +1,32 @@
 import processing.video.*;
-import java.lang.management.ManagementFactory;
-import java.lang.management.OperatingSystemMXBean;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import processing.video.*;
 
 int pixel;
-Boolean greyKeyFlag = false, blurKeyFlag = false;
+Boolean greyKeyFlag = false, blurKeyFlag = false, edgeKeyFlag = false, focusKeyFlag = false;
 int counter = 0;
 Boolean mouseClicked = false;
 Double CPUTotal = new Double(0);
 Double CPUTotalPorc = new Double(0);
 
-Movie video;
+
+float avgBlur[][] = {
+    {0.111111,0.111111,0.111111},
+    {0.111111,0.111111,0.111111},
+    {0.111111,0.111111,0.111111}
+  },
+  edges[][] = {
+    {-1.0,-1.0,-1.0},
+    {-1.0,8.0,-1.0},
+    {-1.0,-1.0,-1.0}
+  },
+  focus[][] = {
+    {0,0,-1,0,0},
+    {0,0,-1,0,0},
+    {-1,-1,9,-1,-1},
+    {0,0,-1,0,0},
+    {0,0,-1,0,0},
+  };
+
+Movie video, secVideo;
 float lumaValue;
 String path = "video.mp4";
 void setup(){
@@ -22,161 +36,90 @@ void setup(){
 }
 
 void draw(){
-  image(video, 0, 0, width, height);
-  CPUTotal += printUsage();
+  if (video.available()) {
+    video.read();
+  }
+  if( greyKeyFlag )
+    image(greyScale( video ), 0, 0);
+  else if( blurKeyFlag )
+    image( applyMask( video, avgBlur, 3 ), 0, 0);
+  else if( edgeKeyFlag )
+    image( applyMask( video, edges, 3 ), 0, 0);
+  else if( focusKeyFlag )
+    image( applyMask( video, focus, 5 ), 0, 0);
+  else
+    image(video, 0, 0);
   text("Frames por segundo: " + frameRate + " FPS", 50, 60);
 }
 
-void greyScale(){
+PImage greyScale( Movie video ){
+  Movie rVideo = video;
   for( int i = 0; i < video.width; i++ ){
     for( int j = 0; j < video.height * 1; j++ ){
       pixel = video.get( i, j );
       lumaValue = (0.2126 * red(pixel)) + (0.7152 * green(pixel)) + (0.0722 * blue(pixel));
-      video.set( i, j, color( lumaValue, lumaValue, lumaValue ) );
+      rVideo.set( i, j, color( lumaValue, lumaValue, lumaValue ) );
     }
   }
+  return rVideo;
 }
 
-void avgBlur(){
-  Float avgBlur[][] = {
-    {0.111111,0.111111,0.111111},
-    {0.111111,0.111111,0.111111},
-    {0.111111,0.111111,0.111111}
-  };
-  for( int i = 1; i < video.width - 1; i++ ){
-    for( int j = 1; j < video.height - 1; j++ ){
-      pixel = get( i, j );
-      int redColor = (int)( avgBlur[0][0]* red(video.get(i-1, j-1)) +
-        avgBlur[0][1]*red(video.get(i-1, j)) +
-        avgBlur[0][2]*red(video.get(i-1, j+1)) + 
-        avgBlur[1][0]*red(video.get(i, j-1)) + 
-        avgBlur[1][1]*red(video.get(i, j)) + 
-        avgBlur[1][2]*red(video.get(i, j+1)) + 
-        avgBlur[2][0]*red(video.get(i+1, j-1)) + 
-        avgBlur[2][1]*red(video.get(i+1, j)) + 
-        avgBlur[2][2]*red(video.get(i+1, j+1)));
-      int greenColor = (int)( avgBlur[0][0]* green(video.get(i-1, j-1)) +
-        avgBlur[0][1]*green(video.get(i-1, j)) +
-        avgBlur[0][2]*green(video.get(i-1, j+1)) + 
-        avgBlur[1][0]*green(video.get(i, j-1)) + 
-        avgBlur[1][1]*green(video.get(i, j)) + 
-        avgBlur[1][2]*green(video.get(i, j+1)) + 
-        avgBlur[2][0]*green(video.get(i+1, j-1)) + 
-        avgBlur[2][1]*green(video.get(i+1, j)) + 
-        avgBlur[2][2]*green(video.get(i+1, j+1)));
-      int blueColor = (int)( avgBlur[0][0]* blue(video.get(i-1, j-1)) +
-        avgBlur[0][1]*blue(video.get(i-1, j)) +
-        avgBlur[0][2]*blue(video.get(i-1, j+1)) + 
-        avgBlur[1][0]*blue(video.get(i, j-1)) + 
-        avgBlur[1][1]*blue(video.get(i, j)) + 
-        avgBlur[1][2]*blue(video.get(i, j+1)) + 
-        avgBlur[2][0]*blue(video.get(i+1, j-1)) + 
-        avgBlur[2][1]*blue(video.get(i+1, j)) + 
-        avgBlur[2][2]*blue(video.get(i+1, j+1)));
-        if( redColor < 0 ){
-          redColor = 0; 
-        }
-        if( greenColor < 0 ){
-          redColor = 0; 
-        }
-        if( blueColor < 0 ){
-          redColor = 0; 
-        }
-      video.set( i, j, color( redColor, greenColor, blueColor ) );
+PImage applyMask( Movie video, float[][] mask, int matrixSize ){
+  PImage rVideo = createImage(video.width, video.height, RGB);
+  for (int x = 0; x < video.width; x++) {
+    for (int y = 0; y < video.height; y++ ) {
+      color c = convolution(x, y, mask, matrixSize, video);
+      rVideo.set(x, y, c);
     }
   }
-}
-
-void movieEvent(Movie m){
-  m.read();
-  if( greyKeyFlag ){
-    greyScale();
-  }
-  else if( blurKeyFlag ){
-    avgBlur();
-  }
+  return rVideo;
 }
 
 void keyPressed(){
-   if( key == 'g' && !greyKeyFlag){
+   if( key == 'g' && !greyKeyFlag ){
      greyKeyFlag = true;
    }
-   else if( key == 'b' && !blurKeyFlag){
+   else if( key == 'b' && !blurKeyFlag ){
      blurKeyFlag = true;
    }
+   else if( key == 'e' && !edgeKeyFlag ){
+     edgeKeyFlag = true;
+   }
+   else if( key == 'f' && !focusKeyFlag ){
+     focusKeyFlag = true;
+   }
    else{
+     focusKeyFlag = false;
+     edgeKeyFlag = false;
      greyKeyFlag = false; 
      blurKeyFlag = false;
    }
 }
 
-private Double printUsage() {
-  counter++;
-  OperatingSystemMXBean operatingSystemMXBean = ManagementFactory.getOperatingSystemMXBean();
-  Double result = new Double( 0 );
-  String resultString;
-  for (Method method : operatingSystemMXBean.getClass().getDeclaredMethods()) {
-    method.setAccessible(true);
-    if (method.getName().contains("getProcessCpuLoad")
-        && Modifier.isPublic(method.getModifiers())) {
-            Object value;
-        try {
-            value = method.invoke(operatingSystemMXBean);
-        } catch (Exception e) {
-            value = 0.0;
-        } // try
-        result = Double.valueOf( value.toString() ) * 100;
-        try{
-          resultString = result.toString().substring(0,5);
-        }
-        catch( Exception e ){
-          resultString = result.toString().substring(0,2);
-        }
-        
-        text( "Uso de CPU: " + resultString + "%", 50, 45 );
-    } // if
-  } // for
-  return result;
+color convolution(int x, int y, float[][] matrix, int matrixsize, Movie img)
+{
+  float rtotal = 0.0;
+  float gtotal = 0.0;
+  float btotal = 0.0;
+  int offset = matrixsize / 2;
+  for (int i = 0; i < matrixsize; i++){
+    for (int j= 0; j < matrixsize; j++){
+      // What pixel are we testing
+      int xloc = x+i-offset;
+      int yloc = y+j-offset;
+      int loc = xloc + img.width*yloc;
+      // Make sure we haven't walked off our image, we could do better here
+      loc = constrain(loc,0,img.pixels.length-1);
+      // Calculate the convolution
+      rtotal += (red(img.pixels[loc]) * matrix[i][j]);
+      gtotal += (green(img.pixels[loc]) * matrix[i][j]);
+      btotal += (blue(img.pixels[loc]) * matrix[i][j]);
+    }
+  }
+  // Make sure RGB is within range
+  rtotal = constrain(rtotal, 0, 255);
+  gtotal = constrain(gtotal, 0, 255);
+  btotal = constrain(btotal, 0, 255);
+  // Return the resulting color
+  return color(rtotal, gtotal, btotal);
 }
-
-//void edgeDetection(){
-//    Float avgBlur[][] = {
-//    {-0.1,-0.1,-0.1},
-//    {-0.1,0.8,-0.1},
-//    {-0.1,-0.1,-0.1}
-//  };
-//  for( int i = 1; i < video.width - 1; i++ ){
-//    for( int j = 1; j < video.height - 1; j++ ){
-//      int redColor = (int)( avgBlur[0][0]* red( video.get(i-1, j-1) ) +
-//        avgBlur[0][1]*red(video.get(i-1, j)) +
-//        avgBlur[0][2]*red(video.get(i-1, j+1)) + 
-//        avgBlur[1][0]*red(video.get(i, j-1)) + 
-//        avgBlur[1][1]*red(video.get(i, j)) + 
-//        avgBlur[1][2]*red(video.get(i, j+1)) + 
-//        avgBlur[2][0]*red(video.get(i+1, j-1)) + 
-//        avgBlur[2][1]*red(video.get(i+1, j)) + 
-//        avgBlur[2][2]*red(video.get(i+1, j+1)))%255;
-//      int greenColor = (int)( avgBlur[0][0]* green(video.get(i-1, j-1)) +
-//        avgBlur[0][1]*green(video.get(i-1, j)) +
-//        avgBlur[0][2]*green(video.get(i-1, j+1)) + 
-//        avgBlur[1][0]*green(video.get(i, j-1)) + 
-//        avgBlur[1][1]*green(video.get(i, j)) + 
-//        avgBlur[1][2]*green(video.get(i, j+1)) + 
-//        avgBlur[2][0]*green(video.get(i+1, j-1)) + 
-//        avgBlur[2][1]*green(video.get(i+1, j)) + 
-//        avgBlur[2][2]*green(video.get(i+1, j+1)))%255;
-//      int blueColor = (int)( avgBlur[0][0]* blue(video.get(i-1, j-1)) +
-//        avgBlur[0][1]*blue(video.get(i-1, j)) +
-//        avgBlur[0][2]*blue(video.get(i-1, j+1)) + 
-//        avgBlur[1][0]*blue(video.get(i, j-1)) + 
-//        avgBlur[1][1]*blue(video.get(i, j)) + 
-//        avgBlur[1][2]*blue(video.get(i, j+1)) + 
-//        avgBlur[2][0]*blue(video.get(i+1, j-1)) + 
-//        avgBlur[2][1]*blue(video.get(i+1, j)) + 
-//        avgBlur[2][2]*blue(video.get(i+1, j+1)))%255;
-
-//      video.set( i, j, color( redColor, greenColor, blueColor ) );
-//    }
-//  }
-  
-//}
