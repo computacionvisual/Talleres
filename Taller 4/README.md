@@ -191,3 +191,21 @@ Shaders:  60FPS  promedio
 * En el caso del vídeo, la GPU lo lleva siempre sobre los 60FPS sin importar qué filtro se le aplique, mientras que el procesador sí disminuye considerablemente los frames por segundo que es capáz de mostrar.
 
 * Para la GPU el aumento de tamaño en el kernel de filtro a aplicar (es el caso de ENFOQUE) no supone ningún inconveniente, mientras que en el caso del procesador sí se evidencia un aumento en el tiempo de procesamiento en el caso de la foto, y una reducción en los FPS en el caso del vídeo, con respecto a los demás filtros.
+
+
+
+3. Tercer punto del taller.
+
+Se trabajó sobre dos proyectos independientes. El primero es "without_normal_mapping", en el cual se proyecta una imágen (de entre cinco texturas disponibles) sobre un cilindro en rotación. El segundo es "normal_mapping", en el cual se aplica textura a un cilindro (y no simplemente se proyecta una imágen).
+
+Ambos proyectos tienen acceso al mismo abanico de texturas, las cuales son:
+
+* alien    (F)
+* grietas  (D)
+* metal    (G)
+* papel    (S)
+* sofa     (A)
+
+### Conclusiones.
+
+* Al hacer la comparación entre un proyecto y otro, en uno aplicando texturas y en el otro no, es muy clara la diferencia. El cilindro al cual no se le aplican texturas se asemeja a un cilindro al cual le hubieran pegado un papel con el dibujo de la textura, y no como si de verdad tuviera éste un relieve.
